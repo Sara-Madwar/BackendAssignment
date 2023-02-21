@@ -1,29 +1,34 @@
 package application;
 
-	import java.sql.Connection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-	import java.sql.DriverManager;
-	import java.sql.PreparedStatement;
-	import java.sql.ResultSet;
-	import java.sql.SQLException;
+public class DataAccessLayer {
+	
+	String connectionURL = "jdbc:sqlserver://localhost:1433;database=ConsidLibrary;user=considdev;password=consid2023;encrypt=true;trustServerCertificate=true;";
 
-	public class DataAccessLayer {
-		
-			String connectionURL = "jdbc:sqlserver://localhost:1433;database=Foretagdb;user=devretake;password=sara1234;encrypt=true;trustServerCertificate=true;";
+	//Create
 
-		//Register
+		public void createLibrary(int libraryId, int categoryId, String title, String author, int pages, int runTimeMinutes, boolean isBorrowable, String borrower, String borrowDate, String type) throws SQLException {
 
-		public void registerEmployee(String employeeID, String employeeName, int employeeSalary, String departmentName) throws SQLException {
-
-				String query = "INSERT INTO Employee VALUES(?, ?, ?, ?)";
+				String query = "INSERT INTO LibraryItem VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 				Connection connection = DriverManager.getConnection(connectionURL);
 
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				preparedStatement.setString(1, employeeID);
-				preparedStatement.setString(2, employeeName);
-				preparedStatement.setInt(3, employeeSalary);
-				preparedStatement.setString(4, departmentName);
+				preparedStatement.setInt(1, libraryId);
+				preparedStatement.setInt(2, categoryId);
+				preparedStatement.setString(3, title);
+				preparedStatement.setString(4, author);
+				preparedStatement.setInt(5, pages);
+				preparedStatement.setInt(6, runTimeMinutes);
+				preparedStatement.setBoolean(7, isBorrowable);
+				preparedStatement.setString(8, borrower);
+				preparedStatement.setString(9, borrowDate);
+				preparedStatement.setString(10, type);
 
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
@@ -31,90 +36,102 @@ package application;
 				
 			}
 		
-		public void registerDepartment(String departmentName, int departmentBudget) throws SQLException {
+		//Update
+		public void updateCategory(int categoryId, String categoryName) throws SQLException {
 
 			Connection connection = DriverManager.getConnection(connectionURL);
-			String query = "INSERT INTO Departments VALUES(?, ?)";
+			String query = "UPDATE Category SET categoryName = ? WHERE categoryID = ?";
 
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, departmentName);
-			preparedStatement.setInt(2, departmentBudget);
+			preparedStatement.setInt(1, categoryId);
+			preparedStatement.setString(2, categoryName);
+
 
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.close();
 			
 		}
-		
-		public void registerEmployeeOnDepartment(String departmentName, String employeeID) throws SQLException {
+		public void updateLibraryItem(int libraryId, int categoryId, String title, String author, int pages, int runTimeMinutes, boolean isBorrowable, String borrower, String borrowDate, String type) throws SQLException {
 
 			Connection connection = DriverManager.getConnection(connectionURL);
-			String query = "UPDATE Employee SET departmentName = ? WHERE employeeID = ? ";
+			String query = "UPDATE LibraryItem SET title =?, author =?, pages=?, runTimeMinutes =?, isBorrowable=?, borrower=?, borrowDate=?, type=? WHERE libraryId = ?";
 
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, departmentName);
-			preparedStatement.setString(2, employeeID);
+			preparedStatement.setInt(1, libraryId);
+			preparedStatement.setInt(2, categoryId);
+			preparedStatement.setString(3, title);
+			preparedStatement.setString(4, author);
+			preparedStatement.setInt(5, pages);
+			preparedStatement.setInt(6, runTimeMinutes);
+			preparedStatement.setBoolean(7, isBorrowable);
+			preparedStatement.setString(8, borrower);
+			preparedStatement.setString(9, borrowDate);
+			preparedStatement.setString(10, type);
 
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.close();
-			
 		}
-		
-		//Find
-		
-		public ResultSet findEmployeeByEmployeeId(String employeeID) throws SQLException {
-			String query = "SELECT  employeeID, employeeName, employeeSalary, departmentName FROM Employee WHERE employeeID = ?";
+			//Delete
 			
-			Connection connection = DriverManager.getConnection(connectionURL);
-			
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, employeeID);
-			
-			ResultSet resultSet = preparedStatement.executeQuery();
-			return resultSet;
-			
-		}
-		
-		public ResultSet findEmployee(String employeeID) throws SQLException {
-			String query = "SELECT  employeeID FROM Employee WHERE employeeID = ?";
-			
-			Connection connection = DriverManager.getConnection(connectionURL);
-			
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, employeeID);
-			
-			ResultSet resultSet = preparedStatement.executeQuery();
-			return resultSet;
-			
-		}
-		
-		public ResultSet findDepartmentByDepartmentName(String departmentName) throws SQLException {
-			String query = "SELECT departmentName, departmentBudget FROM Departments WHERE departmentName = ?";
-			
-			Connection connection = DriverManager.getConnection(connectionURL);
-			
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, departmentName);
-			
-			ResultSet resultSet = preparedStatement.executeQuery();
-			return resultSet;
-			
-		}
-		
-		//Show All
-		public ResultSet showAllEmployeeOnDepartment(String departmentName) throws SQLException {
-			String query = "SELECT employeeID, employeeName FROM Employee WHERE departmentName = ?";
-			
-			Connection connection = DriverManager.getConnection(connectionURL);
-			
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, departmentName);
-			
-			ResultSet resultSet = preparedStatement.executeQuery();
-			return resultSet;
-			
-		}
+			public void deleteCategory(int categoryId) throws SQLException {
 
-	}
+			Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "Delete FROM Category WHERE categoryId = ?";
 
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, categoryId);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			connection.close();
+		}
+			
+			public void deleteLibrary(int libraryId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "Delete FROM LibraryItem WHERE libraryId = ?";
+
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, libraryId);
+
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+				connection.close();
+			}
+			
+			//find
+			public void findLibrary(int libraryId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT categoryId, title, author, pages, runTimeMinutes, isBorrowable, borrower, borrowDate, type FROM LibraryItem WHERE libraryId = ?";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, libraryId);
+
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+				connection.close();
+			}
+		
+			public ResultSet findCategory(int categoryId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT categoryName FROM Category WHERE categoryId = ?";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, categoryId);
+				
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet;
+			}
+
+			public String getConnectionURL() {
+				return connectionURL;
+			}
+
+			public void setConnectionURL(String connectionURL) {
+				this.connectionURL = connectionURL;
+			}
+		
+
+}
