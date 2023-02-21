@@ -11,7 +11,6 @@ public class DataAccessLayer {
 	String connectionURL = "jdbc:sqlserver://localhost:1433;database=ConsidLibrary;user=considdev;password=consid2023;encrypt=true;trustServerCertificate=true;";
 
 	//Create
-
 		public void createLibrary(int libraryId, int categoryId, String title, String author, int pages, int runTimeMinutes, boolean isBorrowable, String borrower, String borrowDate, String type) throws SQLException {
 
 				String query = "INSERT INTO LibraryItem VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -46,7 +45,6 @@ public class DataAccessLayer {
 			preparedStatement.setInt(1, categoryId);
 			preparedStatement.setString(2, categoryName);
 
-
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.close();
@@ -78,7 +76,7 @@ public class DataAccessLayer {
 			public void deleteCategory(int categoryId) throws SQLException {
 
 			Connection connection = DriverManager.getConnection(connectionURL);
-			String query = "Delete FROM Category WHERE categoryId = ?";
+			String query = "DELETE FROM Category WHERE categoryId = ?";
 
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, categoryId);
@@ -91,7 +89,7 @@ public class DataAccessLayer {
 			public void deleteLibrary(int libraryId) throws SQLException {
 
 				Connection connection = DriverManager.getConnection(connectionURL);
-				String query = "Delete FROM LibraryItem WHERE libraryId = ?";
+				String query = "DELETE FROM LibraryItem WHERE libraryId = ?";
 
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setInt(1, libraryId);
@@ -102,7 +100,7 @@ public class DataAccessLayer {
 			}
 			
 			//find
-			public void findLibrary(int libraryId) throws SQLException {
+			public ResultSet findLibrary(int libraryId) throws SQLException {
 
 				Connection connection = DriverManager.getConnection(connectionURL);
 				String query = "SELECT categoryId, title, author, pages, runTimeMinutes, isBorrowable, borrower, borrowDate, type FROM LibraryItem WHERE libraryId = ?";
@@ -110,8 +108,8 @@ public class DataAccessLayer {
 				preparedStatement.setInt(1, libraryId);
 
 				preparedStatement.executeUpdate();
-				preparedStatement.close();
-				connection.close();
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet;
 			}
 		
 			public ResultSet findCategory(int categoryId) throws SQLException {
@@ -124,14 +122,15 @@ public class DataAccessLayer {
 				ResultSet resultSet = preparedStatement.executeQuery();
 				return resultSet;
 			}
+			
+			public ResultSet findCategoryInLibrary(int categoryId) throws SQLException {
 
-			public String getConnectionURL() {
-				return connectionURL;
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT categoryId FROM LibraryItem WHERE categoryId = ?";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, categoryId);
+				
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet;
 			}
-
-			public void setConnectionURL(String connectionURL) {
-				this.connectionURL = connectionURL;
-			}
-		
-
 }
