@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+   <children>
+      <AnchorPane prefHeight="426.0" prefWidth="497.0">
+         <children>
+            <Label layoutX="15.0" layoutY="11.0" text="Category:" />
+            <Label layoutX="15.0" layoutY="40.0" text="CategoryId:" />
+            <Label layoutX="13.0" layoutY="73.0" text="CategoryName:" />
+            <Label layoutX="19.0" layoutY="116.0" text="LibraryItem:" />
+            <Label layoutX="21.0" layoutY="141.0" text="LibraryId:" />
+            <Label layoutX="21.0" layoutY="167.0" text="CategoryId:" />
+            <Label layoutX="21.0" layoutY="192.0" text="Title:" />
+            <Label layoutX="20.0" layoutY="218.0" text="Author:" />
+            <Label layoutX="20.0" layoutY="247.0" text="Pages:" />
+            <Label layoutX="20.0" layoutY="277.0" text="RunTimeMinutes:" />
+            <Label layoutX="20.0" layoutY="305.0" text="IsBorrowable:" />
+            <Label layoutX="20.0" layoutY="335.0" text="Borrower:" />
+            <Label layoutX="20.0" layoutY="361.0" text="Borrow Date:" />
+            <Label layoutX="20.0" layoutY="383.0" text="Type:" />
+            <TextField layoutX="100.0" layoutY="36.0" />
+            <TextField layoutX="100.0" layoutY="69.0" />
+            <Line endX="100.0" layoutX="118.0" layoutY="107.0" startX="-100.0" />
+            <TextField layoutX="100.0" layoutY="137.0" />
+            <TextField layoutX="100.0" layoutY="163.0" />
+            <TextField layoutX="100.0" layoutY="188.0" />
+            <TextField layoutX="100.0" layoutY="214.0" />
+            <TextField layoutX="100.0" layoutY="243.0" />
+            <TextField layoutX="118.0" layoutY="273.0" prefHeight="25.0" prefWidth="127.0" />
+            <TextField layoutX="100.0" layoutY="301.0" />
+            <TextField layoutX="100.0" layoutY="331.0" />
+            <TextField layoutX="100.0" layoutY="357.0" />
+            <TextField layoutX="100.0" layoutY="388.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
