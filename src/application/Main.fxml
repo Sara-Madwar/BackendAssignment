@@ -9,41 +9,43 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
-      <AnchorPane prefHeight="459.0" prefWidth="517.0">
+      <AnchorPane layoutY="1.0" prefHeight="485.0" prefWidth="554.0">
          <children>
-            <Label layoutX="15.0" layoutY="11.0" text="Category:" />
-            <Label layoutX="15.0" layoutY="40.0" text="CategoryId:" />
-            <Label layoutX="13.0" layoutY="73.0" text="CategoryName:" />
-            <Label layoutX="19.0" layoutY="116.0" text="LibraryItem:" />
-            <Label layoutX="21.0" layoutY="141.0" text="LibraryId:" />
-            <Label layoutX="21.0" layoutY="167.0" text="CategoryId:" />
-            <Label layoutX="21.0" layoutY="192.0" text="Title:" />
-            <Label layoutX="20.0" layoutY="218.0" text="Author:" />
-            <Label layoutX="20.0" layoutY="247.0" text="Pages:" />
-            <Label layoutX="20.0" layoutY="277.0" text="RunTimeMinutes:" />
-            <Label layoutX="20.0" layoutY="305.0" text="IsBorrowable:" />
-            <Label layoutX="20.0" layoutY="335.0" text="Borrower:" />
-            <Label layoutX="20.0" layoutY="361.0" text="Borrow Date:" />
-            <Label layoutX="20.0" layoutY="383.0" text="Type:" />
-            <TextField fx:id="txt_CatId" layoutX="100.0" layoutY="36.0" />
-            <TextField fx:id="txt_CatName" layoutX="100.0" layoutY="69.0" />
-            <Line endX="100.0" layoutX="118.0" layoutY="107.0" startX="-100.0" />
-            <TextField fx:id="txt_libraryId" layoutX="100.0" layoutY="137.0" />
-            <TextField fx:id="txt_CategoryId" layoutX="100.0" layoutY="163.0" />
-            <TextField fx:id="txt_title" layoutX="100.0" layoutY="188.0" />
-            <TextField fx:id="txt_author" layoutX="100.0" layoutY="214.0" />
-            <TextField fx:id="txt_pages" layoutX="100.0" layoutY="243.0" />
-            <TextField fx:id="txt_runTime" layoutX="118.0" layoutY="273.0" prefHeight="25.0" prefWidth="127.0" />
-            <TextField fx:id="txt_borrowable" layoutX="100.0" layoutY="301.0" />
-            <TextField fx:id="txt_borrower" layoutX="100.0" layoutY="331.0" />
-            <TextField fx:id="txt_date" layoutX="100.0" layoutY="357.0" />
-            <TextField fx:id="txt_type" layoutX="100.0" layoutY="388.0" />
-            <Button fx:id="createCat" layoutX="268.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnAddLibrary_Click" text="Create" />
-            <Button fx:id="deleteCat" layoutX="268.0" layoutY="60.0" mnemonicParsing="false" onAction="#btnDeleteCategory_Click" text="Delete" />
-            <Button fx:id="createLib" layoutX="268.0" layoutY="137.0" mnemonicParsing="false" onAction="#btnAddLibrary_Click" text="Create" />
-            <Button fx:id="deleteLib" layoutX="268.0" layoutY="172.0" mnemonicParsing="false" onAction="#btnDeleteLibrary_Click" text="Delete" />
-            <Button fx:id="updateLib" layoutX="268.0" layoutY="206.0" mnemonicParsing="false" onAction="#btnUpdateLibrary_Click" text="Update" />
-            <TextArea fx:id="txt_Area" layoutX="270.0" layoutY="237.0" prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="15.0" layoutY="40.0" text="Category:" />
+            <Label layoutX="15.0" layoutY="70.0" text="CategoryId:" />
+            <Label layoutX="13.0" layoutY="102.0" text="CategoryName:" />
+            <Label layoutX="18.0" layoutY="151.0" text="LibraryItem:" />
+            <Label layoutX="19.0" layoutY="184.0" text="LibraryId:" />
+            <Label layoutX="19.0" layoutY="210.0" text="CategoryId:" />
+            <Label layoutX="19.0" layoutY="235.0" text="Title:" />
+            <Label layoutX="18.0" layoutY="261.0" text="Author:" />
+            <Label layoutX="18.0" layoutY="290.0" text="Pages:" />
+            <Label layoutX="18.0" layoutY="320.0" text="RunTimeMinutes:" />
+            <Label layoutX="18.0" layoutY="348.0" text="IsBorrowable:" />
+            <Label layoutX="18.0" layoutY="378.0" text="Borrower:" />
+            <Label layoutX="18.0" layoutY="404.0" text="Borrow Date:" />
+            <Label layoutX="18.0" layoutY="426.0" text="Type:" />
+            <TextField fx:id="txt_CatId" layoutX="100.0" layoutY="63.0" />
+            <TextField fx:id="txt_CatName" layoutX="100.0" layoutY="99.0" />
+            <Line endX="100.0" layoutX="118.0" layoutY="141.0" startX="-100.0" />
+            <TextField fx:id="txt_libraryId" layoutX="98.0" layoutY="180.0" />
+            <TextField fx:id="txt_CategoryId" layoutX="98.0" layoutY="206.0" />
+            <TextField fx:id="txt_title" layoutX="98.0" layoutY="231.0" />
+            <TextField fx:id="txt_author" layoutX="98.0" layoutY="257.0" />
+            <TextField fx:id="txt_pages" layoutX="98.0" layoutY="286.0" />
+            <TextField fx:id="txt_runTime" layoutX="116.0" layoutY="316.0" prefHeight="25.0" prefWidth="127.0" />
+            <TextField fx:id="txt_borrowable" layoutX="98.0" layoutY="344.0" />
+            <TextField fx:id="txt_borrower" layoutX="98.0" layoutY="374.0" />
+            <TextField fx:id="txt_date" layoutX="98.0" layoutY="400.0" />
+            <TextField fx:id="txt_type" layoutX="98.0" layoutY="431.0" />
+            <Button fx:id="createCat" layoutX="263.0" layoutY="57.0" mnemonicParsing="false" onAction="#btnAddLibrary_Click" text="Create" />
+            <Button fx:id="deleteCat" layoutX="264.0" layoutY="91.0" mnemonicParsing="false" onAction="#btnDeleteCategory_Click" text="Delete" />
+            <Button fx:id="createLib" layoutX="255.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnAddLibrary_Click" text="Create" />
+            <Button fx:id="deleteLib" layoutX="385.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnDeleteLibrary_Click" text="Delete" />
+            <Button fx:id="updateLib" layoutX="318.0" layoutY="425.0" mnemonicParsing="false" onAction="#btnUpdateLibrary_Click" text="Update" />
+            <TextArea fx:id="txt_Area" layoutX="256.0" layoutY="152.0" prefHeight="253.0" prefWidth="287.0" />
+            <Button fx:id="showList" layoutX="356.0" layoutY="40.0" mnemonicParsing="false" text="Show List" />
+            <Button fx:id="sortType" layoutX="354.0" layoutY="72.0" mnemonicParsing="false" text="Sort List by Type" />
          </children>
       </AnchorPane>
    </children>

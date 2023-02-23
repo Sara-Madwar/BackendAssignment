@@ -133,4 +133,28 @@ public class DataAccessLayer {
 				ResultSet resultSet = preparedStatement.executeQuery();
 				return resultSet;
 			}
+			
+			public ResultSet showLibraryList(int categoryId) throws SQLException {
+				Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "SELECT *\r\n"
+					+ "FROM LibraryItem\r\n"
+					+ "LEFT OUTER JOIN Category \r\n"
+					+ "ON LibraryItem.categoryId = Category.categoryId\r\n"
+					+ "ORDER BY CategoryName";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, categoryId);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
+			return resultSet;
+			}
+			
+			public ResultSet sortByType(int libraryId) throws SQLException {
+				Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "SELECT * FROM LibraryItem ORDER BY type";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, libraryId);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
+			return resultSet;
+			}
 }

@@ -48,6 +48,10 @@ public class Controller {
 	private Button deleteLib;
 	@FXML
 	private Button updateLib;
+	@FXML
+	private Button showList;
+	@FXML
+	private Button sortType;
 	
 	@FXML
 	private TextArea txt_Area;
