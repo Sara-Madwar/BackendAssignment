@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class DataAccessLayer {
 	
-	String connectionURL = "jdbc:sqlserver://localhost:1433;database=ConsidLibrary;user=considdev;password=consid2023;encrypt=true;trustServerCertificate=true;";
+	String connectionURL = "jdbc:sqlserver://localhost:1433;database=Backenddb;user=considUppgift;password=consid2023;encrypt=true;trustServerCertificate=true;";
 
 	//Create
 		public void createLibrary(int libraryId, int categoryId, String title, String author, int pages, int runTimeMinutes, boolean isBorrowable, String borrower, String borrowDate, String type) throws SQLException {
