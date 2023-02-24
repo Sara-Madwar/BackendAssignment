@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -22,7 +25,7 @@ public class Controller {
 	@FXML
 	private TextField txt_libraryId;
 	@FXML
-	private TextField txt_categoryId;
+	private TextField txt_CategoryId;
 	@FXML
 	private TextField txt_title;
 	@FXML
@@ -64,7 +67,7 @@ public class Controller {
 	@FXML
 	public void btnAddLibrary_Click(ActionEvent event) {
 		String library_Id = txt_libraryId.getText();
-		String cat_Id = txt_categoryId.getText();
+		String cat_Id = txt_CategoryId.getText();
 		String title = txt_title.getText();
 		String author = txt_author.getText();
 		String page = txt_pages.getText();
@@ -248,27 +251,37 @@ public class Controller {
 	
 	@FXML
 	public void btnShowList_Click(ActionEvent event) {
-		String categoryId = txt_CatId.getText();
+		String categoryId = txt_CategoryId.getText();
 		if (categoryId.length() == 4) {
-			
+		
 			try {
 				int category_Id = Integer.parseInt(categoryId);
-				dal.showLibraryList(category_Id);
 				ResultSet result = dal.showLibraryList(category_Id);
+				ListView<String> lists = new ListView<String>();
+				ObservableList<String> items =FXCollections.observableArrayList (categoryId);
+
+				lists.setItems(items);
 
 				boolean anyResults = false; 
 				txt_Area.setText("All Library Items which are ordered by category Name"); 
 				while(result.next()) {
 					anyResults= true;
-					String studentID = result.getString("studentID");
-					String grade = result.getString("courseGrade");
-					txt_Area.appendText("\n"+studentID+": "+grade); 
+					String libraryId = result.getString("libraryId");
+					txt_Area.appendText("\n"+": "+libraryId); 
 				}
 				if (!anyResults) {
 					txt_Area.setText("No category found for this ID");
 				}
+				PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+				Connection connection = preparedStatement.getConnection();
+				connection.close();
+
+				preparedStatement.close();
+				result.close();
 
 			}
+			
 			catch (SQLException ex) {
 				txt_Area.setText("We are very sorry to inform you that something went wrong, please call +46 98 018 37 34 and we are happy to solve the problem. \nError code: " + ex.getErrorCode()+"Message from SQL-server: " + ex.getMessage());
 			}
