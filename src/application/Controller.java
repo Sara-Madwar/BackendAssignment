@@ -1,5 +1,7 @@
 package application;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -103,7 +105,6 @@ public class Controller {
 		String category_Id = txt_CatId.getText();
 		String categoryName = txt_CatName.getText();
 		
-		
 		if (category_Id.length() == 4) {
 			try {
 				int categoryId = Integer.parseInt(category_Id);
@@ -146,28 +147,22 @@ public class Controller {
 	
 	public void btnUpdateLibrary_Click(ActionEvent event) {
 		String library = txt_libraryId.getText();
-		String cat = txt_categoryId.getText();
-		String title = txt_title.getText();
-		String author = txt_author.getText();
-		String page = txt_pages.getText();
-		String runTime = txt_runTime.getText();
 		String borrowable = txt_borrowable.getText();
 		String borrower = txt_borrower.getText();
 		String borrowDate = txt_date.getText();
-		String type = txt_type.getText();
-		
 		
 		if (library.length() == 4) {
-			try {
-				
+			try {				
 				int libraryId = Integer.parseInt(library);
-				int categoryId = Integer.parseInt(cat);
-				int pages = Integer.parseInt(page);
-				int runTimeMinutes = Integer.parseInt(runTime);
 				boolean isBorrowable = Boolean.valueOf(borrowable);
 				
-				dal.updateLibraryItem(libraryId, categoryId, title, author, pages, runTimeMinutes, isBorrowable, borrower, borrowDate, type);
-		
+				if (isBorrowable == false) {
+					dal.updateLibraryItem(libraryId, isBorrowable, borrower, borrowDate);
+
+				}else {
+					txt_Area.setText("The item is already borrwed by" + borrower + "From" + borrowDate);
+				}
+				
 		} catch (SQLException ex) {
 			if (ex.getErrorCode() == 2627) {
 				txt_Area.setText("This ID already exists, please enter another one");
@@ -182,43 +177,75 @@ public class Controller {
 	//DELETE
 	public void btnDeleteCategory_Click(ActionEvent event) {
 		String cat = txt_CatId.getText();
-		
 		try {
 			int categoryId = Integer.parseInt(cat);
-			dal.findCategory(categoryId);
 			ResultSet result = dal.findCategoryInLibrary(categoryId); 
+			boolean anyResult = false;
 
-			if (result.next() == true) { 
+			while (result.next() ) {
+				anyResult = true;
+				txt_Area.setText("You can not delete this category because it is referenced to a library Item");
+				
+			}if (!anyResult) {
 				dal.deleteCategory(categoryId);
-				txt_Area.setText("Category with Id: '"+result.getString("category Id")+"'has been removed");
+				txt_Area.setText("This category Id has been removed");
+			}
 
-			} else 
-				dal.deleteCategory(categoryId);
-			txt_Area.setText("This Category Id is not valid");
-		
-		} catch (SQLException ex) {
-			txt_Area.setText(("Error code: " + ex.getErrorCode() + " Message from SQL-server: " + ex.getMessage()));
-		}		
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
+					
+	} catch (SQLException ex) {
+			if (ex.getErrorCode() == 0) {
+				txt_Area.setText("No connection with server!");
+
+			} else {
+				txt_Area.setText("Something went wrong \nError code: " + ex.getErrorCode()
+						+ "Message from SQL-server: " + ex.getMessage());
+			}		
 	}
+}	
 
 	public void btnDeleteLibrary_Click(ActionEvent event) {
 		String library_ID = txt_libraryId.getText();
 		
 		try {
 			int libraryId = Integer.parseInt(library_ID);
-			dal.findLibrary(libraryId);
 			ResultSet result = dal.findLibrary(libraryId); 
+			boolean anyResult = false;
 
-			if (result.next() == false) { 
+			while (result.next() ) {
+				anyResult = true;
+				dal.deleteCategory(libraryId);
+				txt_Area.setText("This library Id has been removed");
+				
+			}if (!anyResult) {
 				txt_Area.setText("Library not found");
-			} else 
-				dal.deleteLibrary(libraryId);
-				txt_Area.setText("Library with Id: '"+result.getString("library_ID")+"'has been removed");
-		
-		} catch (SQLException ex) {
-			txt_Area.setText(("Error code: " + ex.getErrorCode() + " Message from SQL-server: " + ex.getMessage()));
-		}	
+			}
+
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
+					
+	} catch (SQLException ex) {
+			if (ex.getErrorCode() == 0) {
+				txt_Area.setText("No connection with server!");
+
+			} else {
+				txt_Area.setText("Something went wrong \nError code: " + ex.getErrorCode()
+						+ "Message from SQL-server: " + ex.getMessage());
+			}		
+	}	
 	}
+	
 	@FXML
 	public void btnShowList_Click(ActionEvent event) {
 		String categoryId = txt_CatId.getText();

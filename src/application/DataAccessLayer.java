@@ -63,22 +63,16 @@ public class DataAccessLayer {
 			connection.close();
 			
 		}
-		public void updateLibraryItem(int libraryId, int categoryId, String title, String author, int pages, int runTimeMinutes, boolean isBorrowable, String borrower, String borrowDate, String type) throws SQLException {
+		public void updateLibraryItem(int libraryId, boolean isBorrowable, String borrower, String borrowDate) throws SQLException {
 
 			Connection connection = DriverManager.getConnection(connectionURL);
-			String query = "UPDATE LibraryItem SET title =?, author =?, pages=?, runTimeMinutes =?, isBorrowable=?, borrower=?, borrowDate=?, type=? WHERE libraryId = ?";
+			String query = "UPDATE LibraryItem SET isBorrowable=?, borrower=?, borrowDate=? WHERE libraryId = ?";
 
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, libraryId);
-			preparedStatement.setInt(2, categoryId);
-			preparedStatement.setString(3, title);
-			preparedStatement.setString(4, author);
-			preparedStatement.setInt(5, pages);
-			preparedStatement.setInt(6, runTimeMinutes);
-			preparedStatement.setBoolean(7, isBorrowable);
-			preparedStatement.setString(8, borrower);
-			preparedStatement.setString(9, borrowDate);
-			preparedStatement.setString(10, type);
+			preparedStatement.setBoolean(2, isBorrowable);
+			preparedStatement.setString(3, borrower);
+			preparedStatement.setString(4, borrowDate);
 
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
