@@ -35,6 +35,19 @@ public class DataAccessLayer {
 				
 			}
 		
+		public void createCategory(int categoryId, String categoryName) throws SQLException {
+			Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "INSERT INTO Category VALUES (?, ?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, categoryId);
+			preparedStatement.setString(2, categoryName);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			connection.close();
+
+		}
+		
 		//Update
 		public void updateCategory(int categoryId, String categoryName) throws SQLException {
 

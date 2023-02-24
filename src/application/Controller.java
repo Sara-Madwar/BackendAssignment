@@ -49,6 +49,8 @@ public class Controller {
 	@FXML
 	private Button updateLib;
 	@FXML
+	private Button updateCat;
+	@FXML
 	private Button showList;
 	@FXML
 	private Button sortType;
@@ -73,9 +75,6 @@ public class Controller {
 		
 		if (library_Id.length() == 4) {
 			try {
-				if (cat_Id.length() == 0) {
-					cat_Id = null;
-				}
 				int libraryId = Integer.parseInt(library_Id);
 				int categoryId = Integer.parseInt(cat_Id);
 				int pages = Integer.parseInt(page);
@@ -84,8 +83,6 @@ public class Controller {
 
 				dal.createLibrary(libraryId, categoryId, title, author, pages, runTimeMinutes, isBorrowable, borrower, borrowDate, type);
 				txt_Area.setText("You have successfully created the library with the Id " + libraryId);
-			} catch (NumberFormatException ex) {
-				txt_Area.setText("Salary must be a number");
 			} catch (SQLException ex) {
 				if (ex.getErrorCode() == 2627) {
 					txt_Area.setText("This ID already exists, please enter another one");
@@ -97,6 +94,33 @@ public class Controller {
 			}
 
 		} else if (library_Id.length() != 4) {
+			txt_Area.setText("Library Id should have four numbers");
+		}
+	}
+	
+	@FXML
+	public void btnAddCategory_Click(ActionEvent event) {
+		String category_Id = txt_CatId.getText();
+		String categoryName = txt_CatName.getText();
+		
+		
+		if (category_Id.length() == 4) {
+			try {
+				int categoryId = Integer.parseInt(category_Id);
+				
+				dal.createCategory(categoryId, categoryName);
+				txt_Area.setText("You have successfully created the Category with the Id " + categoryId);
+			} catch (SQLException ex) {
+				if (ex.getErrorCode() == 2627) {
+					txt_Area.setText("This ID already exists, please enter another one");
+				} else if (ex.getErrorCode() == 0) {
+					txt_Area.setText("There is no connection to the server.");
+				} else {
+					txt_Area.setText("Something went wrong.");
+				}
+			}
+
+		} else if (category_Id.length() != 4) {
 			txt_Area.setText("Library Id should have four numbers");
 		}
 	}
@@ -135,9 +159,7 @@ public class Controller {
 		
 		if (library.length() == 4) {
 			try {
-				if (cat.length() == 0) {
-					cat = null;
-				}
+				
 				int libraryId = Integer.parseInt(library);
 				int categoryId = Integer.parseInt(cat);
 				int pages = Integer.parseInt(page);
@@ -168,12 +190,11 @@ public class Controller {
 
 			if (result.next() == true) { 
 				dal.deleteCategory(categoryId);
-				txt_Area.setText("Category with Id: '"+result.getString("cat")+"'has been removed");
+				txt_Area.setText("Category with Id: '"+result.getString("category Id")+"'has been removed");
 
 			} else 
 				dal.deleteCategory(categoryId);
-			txt_Area.setText("Category cant be removed");
-				txt_Area.setText("Category with Id: '"+result.getString("cat")+"'has been removed");
+			txt_Area.setText("This Category Id is not valid");
 		
 		} catch (SQLException ex) {
 			txt_Area.setText(("Error code: " + ex.getErrorCode() + " Message from SQL-server: " + ex.getMessage()));
@@ -197,6 +218,41 @@ public class Controller {
 		} catch (SQLException ex) {
 			txt_Area.setText(("Error code: " + ex.getErrorCode() + " Message from SQL-server: " + ex.getMessage()));
 		}	
+	}
+	@FXML
+	public void btnShowList_Click(ActionEvent event) {
+		String categoryId = txt_CatId.getText();
+		if (categoryId.length() == 4) {
+			
+			try {
+				int category_Id = Integer.parseInt(categoryId);
+				dal.showLibraryList(category_Id);
+				ResultSet result = dal.showLibraryList(category_Id);
+
+				boolean anyResults = false; 
+				txt_Area.setText("All Library Items which are ordered by category Name"); 
+				while(result.next()) {
+					anyResults= true;
+					String studentID = result.getString("studentID");
+					String grade = result.getString("courseGrade");
+					txt_Area.appendText("\n"+studentID+": "+grade); 
+				}
+				if (!anyResults) {
+					txt_Area.setText("No category found for this ID");
+				}
+
+			}
+			catch (SQLException ex) {
+				txt_Area.setText("We are very sorry to inform you that something went wrong, please call +46 98 018 37 34 and we are happy to solve the problem. \nError code: " + ex.getErrorCode()+"Message from SQL-server: " + ex.getMessage());
+			}
+		}
+		if (categoryId.length() == 0) {
+			txt_Area.setText("Category Id is empty! \nPlease enter a valid category Id");
+			
+		}
+		else if(categoryId.length()!=4) {
+			txt_Area.setText("Please enter a valid Categor Id  and make sure it's formated as: 'xxxx', example: 1234");
+		}
 	}
 	
 
