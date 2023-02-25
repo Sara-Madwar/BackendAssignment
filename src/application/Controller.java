@@ -249,14 +249,14 @@ public class Controller {
 
 				dal.updateEmployee(employeeId, isCEO, isManager, managerId);
 
-				if(isCEO == true) {
+				/*if(isCEO == true) {
 					txt_Area.setText("this data has already a CEO");
 				}else if (isManager == true) {
 					txt_Area.setText("add a manager to this employee" + employeeID);
 				}else {
 					txt_Area.setText("employee has been updated");
 				}
-				
+				*/
 		} catch (SQLException ex) {
 			if (ex.getErrorCode() == 2627) {
 				txt_Area.setText("This ID already exists, please enter another one");
