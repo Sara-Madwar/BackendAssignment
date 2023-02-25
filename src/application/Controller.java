@@ -42,6 +42,20 @@ public class Controller {
 	private TextField txt_date;
 	@FXML
 	private TextField txt_type;
+	@FXML
+	private TextField employeeId;
+	@FXML
+	private TextField firstName;
+	@FXML
+	private TextField lastName;
+	@FXML
+	private TextField salary;
+	@FXML
+	private TextField isCEO;
+	@FXML
+	private TextField isManager;
+	@FXML
+	private TextField managerId;
 	
 	@FXML
 	private Button createCat;
@@ -59,6 +73,12 @@ public class Controller {
 	private Button showList;
 	@FXML
 	private Button sortType;
+	@FXML
+	private Button btn_create;
+	@FXML
+	private Button btn_Update;
+	@FXML
+	private Button btn_Delete;
 	
 	@FXML
 	private TextArea txt_Area;
@@ -76,7 +96,6 @@ public class Controller {
 		String borrower = txt_borrower.getText();
 		String borrowDate = txt_date.getText();
 		String type = txt_type.getText();
-		
 		
 		if (library_Id.length() == 4) {
 			try {
@@ -128,7 +147,45 @@ public class Controller {
 			txt_Area.setText("Library Id should have four numbers");
 		}
 	}
+	
+	@FXML
+	public void btnAddEmployee_Click(ActionEvent event) {
+		String employee_Id = employeeId.getText();
+		String emp_firstName = firstName.getText();
+		String emp_lastName = lastName.getText();
+		String empSalary = salary.getText();
+		String isCeo = isCEO.getText();
+		String isManag = isManager.getText();
+		String manager_Id = managerId.getText();
+		if (employee_Id.length() == 4) {
+			try {
+				int employeeId = Integer.parseInt(employee_Id);
+				double salary = Double.valueOf(empSalary);
+				boolean isCEO = Boolean.valueOf(isCeo);
+				boolean isManager = Boolean.valueOf(isManag);
+				int managerId = Integer.parseInt(manager_Id);
+				
+				dal.createEmployee(employeeId, emp_firstName, emp_lastName, salary, isCEO, isManager, managerId);
+				if(isCEO == true) {
+					txt_Area.setText("You can not add this employee as a CEO");
+				}else {
+					txt_Area.setText("Employee with id " + employee_Id +" has been created");
+				}
+			} catch (SQLException ex) {
+				if (ex.getErrorCode() == 2627) {
+					txt_Area.setText("This ID already exists, please enter another one");
+				} else if (ex.getErrorCode() == 0) {
+					txt_Area.setText("There is no connection to the server.");
+				} else {
+					txt_Area.setText("Something went wrong.");
+				}
+			}
 
+		} else if (employee_Id.length() != 4) {
+			txt_Area.setText("Library Id should have four numbers");
+		}
+		
+	}
 	//UPDATE
 	public void btnUpdateCategory_Click(ActionEvent event) {
 		String category_Id = txt_CatId.getText();
@@ -164,6 +221,40 @@ public class Controller {
 
 				}else {
 					txt_Area.setText("The item is already borrwed by" + borrower + "From" + borrowDate);
+				}
+				
+		} catch (SQLException ex) {
+			if (ex.getErrorCode() == 2627) {
+				txt_Area.setText("This ID already exists, please enter another one");
+			} else if (ex.getErrorCode() == 0) {
+				txt_Area.setText("There is no connection to the server.");
+			} else {
+				txt_Area.setText("Something went wrong.");
+			}}
+			}
+	}
+	
+	public void btnUpdateEmployee_Click(ActionEvent event) {
+		String employeeID = employeeId.getText();
+		String isCeo = isCEO.getText();
+		String isManag = isManager.getText();
+		String manag_Id = managerId.getText();
+		
+		if (employeeID.length() == 4) {
+			try {				
+				int employeeId = Integer.parseInt(employeeID);
+				boolean isCEO = Boolean.valueOf(isCeo);
+				boolean isManager = Boolean.valueOf(isManag);
+				int managerId = Integer.parseInt(manag_Id);
+
+				dal.updateEmployee(employeeId, isCEO, isManager, managerId);
+
+				if(isCEO == true) {
+					txt_Area.setText("this data has already a CEO");
+				}else if (isManager == true) {
+					txt_Area.setText("add a manager to this employee" + employeeID);
+				}else {
+					txt_Area.setText("employee has been updated");
 				}
 				
 		} catch (SQLException ex) {
@@ -248,6 +339,43 @@ public class Controller {
 			}		
 	}	
 	}
+	
+	public void btnDeleteEmployee_Click(ActionEvent event) {
+		String employeeID = employeeId.getText();
+		try {
+			int employeeId = Integer.parseInt(employeeID);
+			ResultSet result = dal.findEmployee(employeeId); 
+			boolean anyResult = false;
+
+			while (result.next() ) {
+				anyResult = true;
+				dal.deleteEmployee(employeeId);
+				txt_Area.setText("This employee Id has been removed");
+				
+			}if (!anyResult) {
+				txt_Area.setText("employee Id not found");
+			}
+
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
+			
+		} catch (SQLException ex) {
+			if (ex.getErrorCode() == 0) {
+				txt_Area.setText("No connection with server!");
+
+			} else {
+				txt_Area.setText("Something went wrong \nError code: " + ex.getErrorCode()
+						+ "Message from SQL-server: " + ex.getMessage());
+			}		
+		}
+		}	
+	
+	//Show List
 	
 	@FXML
 	public void btnShowList_Click(ActionEvent event) {

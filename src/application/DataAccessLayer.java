@@ -48,6 +48,23 @@ public class DataAccessLayer {
 
 		}
 		
+		public void createEmployee(int employeeId, String firstName, String lastName, double salary, boolean isCEO, boolean isManager, int managerId) throws SQLException {
+			Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "INSERT INTO Employee VALUES (?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, employeeId);
+			preparedStatement.setString(2, firstName);
+			preparedStatement.setString(3, lastName);
+			preparedStatement.setDouble(4, salary);
+			preparedStatement.setBoolean(5, isCEO);
+			preparedStatement.setBoolean(6, isManager);
+			preparedStatement.setInt(7, managerId);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			connection.close();
+		}
+		
 		//Update
 		public void updateCategory(int categoryId, String categoryName) throws SQLException {
 
@@ -78,6 +95,22 @@ public class DataAccessLayer {
 			preparedStatement.close();
 			connection.close();
 		}
+		
+		public void updateEmployee(int employeeId, boolean isCEO, boolean isManager, int managerId) throws SQLException {
+
+			Connection connection = DriverManager.getConnection(connectionURL);
+			String query = "UPDATE Employee SET isCEO=?, isManager=?, managerId=? WHERE employeeId = ?";
+
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, employeeId);
+			preparedStatement.setBoolean(2, isCEO);
+			preparedStatement.setBoolean(3, isManager);
+			preparedStatement.setInt(4, managerId);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			connection.close();
+		}
 			//Delete
 			
 			public void deleteCategory(int categoryId) throws SQLException {
@@ -100,6 +133,19 @@ public class DataAccessLayer {
 
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setInt(1, libraryId);
+
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+				connection.close();
+			}
+			
+			public void deleteEmployee(int employeeId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "DELETE FROM Employee WHERE employeeId = ?";
+
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, employeeId);
 
 				preparedStatement.executeUpdate();
 				preparedStatement.close();
@@ -140,6 +186,19 @@ public class DataAccessLayer {
 				ResultSet resultSet = preparedStatement.executeQuery();
 				return resultSet;
 			}
+			
+			public ResultSet findEmployee(int employeeId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT firstName, lastName FROM Employee WHERE employeeId = ?";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, employeeId);
+				
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet;
+			}
+			
+			//Show List
 			
 			public ResultSet showLibraryList(int categoryId) throws SQLException {
 				Connection connection = DriverManager.getConnection(connectionURL);
