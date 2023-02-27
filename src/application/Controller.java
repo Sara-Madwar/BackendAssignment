@@ -297,7 +297,7 @@ public class Controller {
 				}
 
 				if(isCEO == true) {
-					txt_Area.setText("this data has already a CEO");
+					txt_Area.setText("You can not manage a CEO employee");
 				}else if (isManager == true) {
 					txt_Area.setText("add a manager to this employee" + employeeID);
 				}else {
@@ -524,6 +524,14 @@ public class Controller {
 				if  (!anyResults){
 					txt_Area.setText("No salary found for this Id");
 				}}
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
+			
 			} catch (SQLException ex) {
 			txt_Area.setText("Something went wrong");
 		}
