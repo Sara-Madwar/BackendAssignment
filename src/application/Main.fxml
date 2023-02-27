@@ -45,7 +45,7 @@
             <Button fx:id="updateLib" layoutX="264.0" layoutY="251.0" mnemonicParsing="false" onAction="#btnUpdateLibrary_Click" text="Update" />
             <TextArea fx:id="txt_Area" layoutX="353.0" layoutY="253.0" prefHeight="207.0" prefWidth="327.0" />
             <Button fx:id="showList" layoutX="259.0" layoutY="286.0" mnemonicParsing="false" onAction="#btnShowList_Click" text="Show List" />
-            <Button fx:id="sortType" layoutX="258.0" layoutY="325.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="List by Type" />
+            <Button fx:id="sortType" layoutX="258.0" layoutY="325.0" mnemonicParsing="false" onAction="#btnShowListByType_Click" prefHeight="25.0" prefWidth="83.0" text="List by Type" />
             <Button fx:id="updateCat" layoutX="264.0" layoutY="107.0" mnemonicParsing="false" onAction="#btnUpdateCategory_Click" text="Update" />
             <Button fx:id="btn_create" layoutX="620.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnAddEmployee_Click" text="Create" />
             <Button fx:id="btn_Update" layoutX="619.0" layoutY="60.0" mnemonicParsing="false" onAction="#btnUpdateEmployee_Click" text="Update" />
@@ -61,6 +61,7 @@
             <Label layoutX="369.0" layoutY="223.0" text="Manager Id" />
             <TextField fx:id="employeeId" layoutX="442.0" layoutY="40.0" />
             <TextField fx:id="managerId" layoutX="443.0" layoutY="220.0" />
+            <Button fx:id="btn_salary" layoutX="596.0" layoutY="131.0" mnemonicParsing="false" onAction="#btnCalculate_Click" text="Calculate Salary" />
          </children>
       </AnchorPane>
       <TextField fx:id="isManager" layoutX="443.0" layoutY="192.0" />

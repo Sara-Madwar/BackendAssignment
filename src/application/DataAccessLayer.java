@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import javafx.scene.control.ListView;
 
 public class DataAccessLayer {
 	
@@ -190,7 +193,18 @@ public class DataAccessLayer {
 			public ResultSet findEmployee(int employeeId) throws SQLException {
 
 				Connection connection = DriverManager.getConnection(connectionURL);
-				String query = "SELECT firstName, lastName FROM Employee WHERE employeeId = ?";
+				String query = "SELECT salary, isCEO, isManager FROM Employee WHERE employeeId = ?";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setInt(1, employeeId);
+				
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet;
+			}
+			
+			public ResultSet findSalary(int employeeId) throws SQLException {
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT salary, CEO FROM Employee WHERE employeeId = ?";
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setInt(1, employeeId);
 				
@@ -200,7 +214,7 @@ public class DataAccessLayer {
 			
 			//Show List
 			
-			public ResultSet showLibraryList(int categoryId) throws SQLException {
+			public ResultSet showLibraryList() throws SQLException {
 				Connection connection = DriverManager.getConnection(connectionURL);
 			String query = "SELECT *\r\n"
 					+ "FROM LibraryItem\r\n"
@@ -208,19 +222,29 @@ public class DataAccessLayer {
 					+ "ON LibraryItem.categoryId = Category.categoryId\r\n"
 					+ "ORDER BY CategoryName";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, categoryId);
 			
 			ResultSet resultSet = preparedStatement.executeQuery();
 			return resultSet;
 			}
 			
-			public ResultSet sortByType(int libraryId) throws SQLException {
-				Connection connection = DriverManager.getConnection(connectionURL);
+			public ResultSet sortByType() throws SQLException {
+			Connection connection = DriverManager.getConnection(connectionURL);
 			String query = "SELECT * FROM LibraryItem ORDER BY type";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setInt(1, libraryId);
 			
 			ResultSet resultSet = preparedStatement.executeQuery();
 			return resultSet;
 			}
+			
+			/*public ListView<String> showList(){
+				ListView<String> list = new ListView<String>();
+
+				Connection connection = DriverManager.getConnection(connectionURL);
+				String query = "SELECT * FROM LibraryItem ORDER BY type";
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+				List<String> resultSet = (List<String>) preparedStatement.executeQuery();
+				return list.resultSet;
+
+			}*/
 }

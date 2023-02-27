@@ -79,6 +79,8 @@ public class Controller {
 	private Button btn_Update;
 	@FXML
 	private Button btn_Delete;
+	@FXML
+	private Button btn_salary;
 	
 	@FXML
 	private TextArea txt_Area;
@@ -193,7 +195,24 @@ public class Controller {
 		
 		try {
 			int categoryId = Integer.parseInt(category_Id);
-			dal.updateCategory(categoryId, categoryName);
+			ResultSet result = dal.findCategory(categoryId);
+
+			boolean anyResults = false;
+			while (result.next()) {
+				anyResults = true;
+				dal.updateCategory(categoryId, categoryName);
+				txt_Area.setText("Category Updated");
+			}
+			if (!anyResults) {
+				txt_Area.setText("No category found with this Id");
+			}
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
 		} catch (SQLException ex) {
 			if (ex.getErrorCode() == 2627) {
 				txt_Area.setText("This ID already exists, please enter another one");
@@ -215,13 +234,31 @@ public class Controller {
 			try {				
 				int libraryId = Integer.parseInt(library);
 				boolean isBorrowable = Boolean.valueOf(borrowable);
+				ResultSet result = dal.findLibrary(libraryId);
+
+				boolean anyResults = false;
+				while (result.next()) {
+					anyResults = true;
+					dal.updateLibraryItem(libraryId, isBorrowable, borrower, borrowDate);
+					txt_Area.setText("Library Item Updated");
 				
-				if (isBorrowable == false) {
+				if (!anyResults) {
+					txt_Area.setText("No library found with this Id");
+				}
+				else if (isBorrowable == false) {
 					dal.updateLibraryItem(libraryId, isBorrowable, borrower, borrowDate);
 
 				}else {
 					txt_Area.setText("The item is already borrwed by" + borrower + "From" + borrowDate);
 				}
+				}
+				PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+				Connection connection = preparedStatement.getConnection();
+				connection.close();
+
+				preparedStatement.close();
+				result.close();
 				
 		} catch (SQLException ex) {
 			if (ex.getErrorCode() == 2627) {
@@ -247,16 +284,33 @@ public class Controller {
 				boolean isManager = Boolean.valueOf(isManag);
 				int managerId = Integer.parseInt(manag_Id);
 
-				dal.updateEmployee(employeeId, isCEO, isManager, managerId);
+				ResultSet result = dal.findEmployee(employeeId);
 
-				/*if(isCEO == true) {
+				boolean anyResults = false;
+				while (result.next()) {
+					anyResults = true;
+					dal.updateEmployee(employeeId, isCEO, isManager, managerId);
+					txt_Area.setText("Employee Updated");
+				}
+				if (!anyResults) {
+					txt_Area.setText("No employee found with this Id");
+				}
+
+				if(isCEO == true) {
 					txt_Area.setText("this data has already a CEO");
 				}else if (isManager == true) {
 					txt_Area.setText("add a manager to this employee" + employeeID);
 				}else {
 					txt_Area.setText("employee has been updated");
 				}
-				*/
+				PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+				Connection connection = preparedStatement.getConnection();
+				connection.close();
+
+				preparedStatement.close();
+				result.close();
+				
 		} catch (SQLException ex) {
 			if (ex.getErrorCode() == 2627) {
 				txt_Area.setText("This ID already exists, please enter another one");
@@ -378,27 +432,23 @@ public class Controller {
 	//Show List
 	
 	@FXML
-	public void btnShowList_Click(ActionEvent event) {
-		String categoryId = txt_CategoryId.getText();
-		if (categoryId.length() == 4) {
-		
+	public void btnShowList_Click(ActionEvent event) {		
 			try {
-				int category_Id = Integer.parseInt(categoryId);
-				ResultSet result = dal.showLibraryList(category_Id);
-				ListView<String> lists = new ListView<String>();
-				ObservableList<String> items =FXCollections.observableArrayList (categoryId);
-
-				lists.setItems(items);
-
-				boolean anyResults = false; 
-				txt_Area.setText("All Library Items which are ordered by category Name"); 
-				while(result.next()) {
+				ResultSet result = dal.showLibraryList();
+				ObservableList<String> items =FXCollections.observableArrayList ();
+				boolean anyResults = false;
+				while (result.next()) {
 					anyResults= true;
-					String libraryId = result.getString("libraryId");
-					txt_Area.appendText("\n"+": "+libraryId); 
+					String categoryId = result.getString("categoryId");
+					items.add(categoryId);
 				}
+
 				if (!anyResults) {
 					txt_Area.setText("No category found for this ID");
+				} else {
+					ListView<String> lists = new ListView<String>(items);
+
+					lists.setItems(items);
 				}
 				PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
 
@@ -407,21 +457,76 @@ public class Controller {
 
 				preparedStatement.close();
 				result.close();
-
 			}
 			
 			catch (SQLException ex) {
-				txt_Area.setText("We are very sorry to inform you that something went wrong, please call +46 98 018 37 34 and we are happy to solve the problem. \nError code: " + ex.getErrorCode()+"Message from SQL-server: " + ex.getMessage());
+				txt_Area.setText("Something went wrong");
 			}
+	}
+
+	public void btnShowListByType_Click(ActionEvent event) {		
+		try {
+			ResultSet result = dal.sortByType();
+			ObservableList<String> item =FXCollections.observableArrayList ();
+			boolean anyResults = false;
+			while (result.next()) {
+				anyResults= true;
+				String libraryId = result.getString("libraryId");
+				item.add(libraryId);
+			}
+
+			if (!anyResults) {
+				txt_Area.setText("No library found for this ID");
+			} else {
+				ListView<String> lists = new ListView<String>(item);
+
+				lists.setItems(item);
+			}
+			PreparedStatement preparedStatement = (PreparedStatement) result.getStatement();
+
+			Connection connection = preparedStatement.getConnection();
+			connection.close();
+
+			preparedStatement.close();
+			result.close();
 		}
-		if (categoryId.length() == 0) {
-			txt_Area.setText("Category Id is empty! \nPlease enter a valid category Id");
-			
+		
+		catch (SQLException ex) {
+			txt_Area.setText("Something went wrong");
 		}
-		else if(categoryId.length()!=4) {
-			txt_Area.setText("Please enter a valid Categor Id  and make sure it's formated as: 'xxxx', example: 1234");
+}
+	@FXML
+	public void btnCalculate_Click(ActionEvent event) {
+		String emp_Id = employeeId.getText();
+		try {
+			int employeeId = Integer.parseInt(emp_Id);
+
+			ResultSet result = dal.findEmployee(employeeId);
+			boolean anyResults = false; 
+			double cEOSalary = 2.125;
+			double managerSalary = 1.125;
+			double employee = 0.125;
+			boolean manager = result.getBoolean("isManager");
+			boolean ceo = result.getBoolean("isCEO");
+
+			while(result.next()) {
+				anyResults= true;
+				if (ceo == true) {
+					double totalSalary = result.getDouble("salary") * cEOSalary;
+					txt_Area.setText("total salary for employee with id" + emp_Id + " :" + totalSalary);
+				}else if (manager == true) {
+					double totalSalary = result.getDouble("salary") * managerSalary;
+					txt_Area.setText("total salary for manager with id" + emp_Id + " :" + totalSalary);
+				} else  {
+					double totalSalary = result.getDouble("salary") * employee;
+					txt_Area.setText("total salary for manager with id" + emp_Id + " :" + totalSalary);
+				}
+				if  (!anyResults){
+					txt_Area.setText("No salary found for this Id");
+				}}
+			} catch (SQLException ex) {
+			txt_Area.setText("Something went wrong");
 		}
 	}
-	
-
+		
 }
